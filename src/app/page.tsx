@@ -4,11 +4,15 @@ import Image from 'next/image'
 import './globals.css'
 import Home from '@/pages/home'
 import InfoModal from '@/components/infoModal'
+import { Helmet } from 'react-helmet';
 
 export default function App() {
   return (
     <main className="flex flex-col items-center justify-between p-10 font-[FavoritSSENSE-Inter] text-base w-full space-y-2">
-			<title>toomanypeople</title>
+			<Helmet>
+				<title>toomanypeople</title>
+				<meta name="description" content="People grouping webapp made by Hardy" />
+			</Helmet>
 			<div className="flex flex-row justify-between items-center w-full">
 				<div className="justify-center">
 					<p>toomanypeople</p>
