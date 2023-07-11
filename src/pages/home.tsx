@@ -62,11 +62,11 @@ export default function Home() {
 			<div className="flex flex-row w-full justify-between">
 				<div className="flex flex-col">
 					<label htmlFor="group-label" className="text-xs">Number of Groups</label>
-					<input className="border border-black p-1" id="group-label" onChange={e => setNumGroups(parseInt(e.target.value) ? parseInt(e.target.value) : 0)} value={numGroups} />
+					<input className="border border-black rounded-none p-1" id="group-label" onChange={e => setNumGroups(parseInt(e.target.value) ? parseInt(e.target.value) : 0)} value={numGroups} />
 				</div>
 				<div className="flex flex-col">
 					<label htmlFor="group-label" className="text-xs">Group Length</label>
-					<input className="border border-black p-1" id="group-label" onChange={e => setGroupLength(parseInt(e.target.value) ? parseInt(e.target.value) : 0)} value={groupLength} />
+					<input className="border border-black rounded-none p-1" id="group-label" onChange={e => setGroupLength(parseInt(e.target.value) ? parseInt(e.target.value) : 0)} value={groupLength} />
 				</div>
 				<button className="px-7 hover:underline hover:font-bold bg-black text-white" onClick={onGenerate}>GENERATE</button>
 			</div>
@@ -78,13 +78,14 @@ export default function Home() {
 				<div className="flex flex-row justify-between items-start">
 					<p className="text-lg">Participants</p>
 					{/* Add participants input */}
-					<div className="flex flex-col">
-						<input className="border border-black p-1" onChange={e => setAddParticipantCurr(e.target.value)} value={addParticipantCurr}/>
-						<button className="p-1 hover:underline hover:font-bold text-sm text-right" onClick={e => {
+					<form className="flex flex-col" onSubmit={e => {
+							e.preventDefault();
 							setParticipants([...participants, addParticipantCurr]);
 							setAddParticipantCurr("");
-						}}>ADD PARTICIPANT</button>
-					</div>
+						}}>
+						<input className="border border-black rounded-none p-1" onChange={e => setAddParticipantCurr(e.target.value)} value={addParticipantCurr}/>
+						<button className="p-1 rounded-none hover:underline hover:font-bold text-sm text-right" type="submit">ADD PARTICIPANT</button>
+					</form>
 				</div>
 				<div className="flex flex-row w-full justify-between">
 					{/* List of participants */}
