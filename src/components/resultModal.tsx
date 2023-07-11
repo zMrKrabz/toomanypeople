@@ -16,6 +16,7 @@ const Result: FC<ResultProps> = ({ groups }) => {
 	}
 
 	return (
+		<div></div>
 	)
 }
 
