@@ -6,9 +6,9 @@ interface ButtonProps {
 
 interface ModalProps {
 	Icon: ComponentType<ButtonProps>;
-	modalTitle?: string;
 	Body: ComponentType;
 	Footer?: ComponentType;
+	modalTitle?: string;
 }
 
 const Modal: FC<ModalProps> = ({ Icon, modalTitle, Footer, Body }) => {
