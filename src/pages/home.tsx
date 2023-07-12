@@ -1,7 +1,7 @@
 'use client'
 
 import Participant from "@/components/participant";
-import { useState, MouseEventHandler } from "react";
+import { useState, MouseEventHandler, useEffect } from "react";
 import Rule, { Rules } from "@/components/rule";
 import { v4 as uuid } from "uuid";
 import createGroups from "@/utils/createGroups";
@@ -27,12 +27,10 @@ export default function Home() {
 	}
 
 	const addParticipantToGroup = (key: string, participant: string) => {
-		console.log("key", key, participant);
 		setRules(prevState => ({
 			...prevState,
 			[key]: [...rules[key], participant]
 		}));
-		console.log("groups", rules);
 	}
 
 	const removeParticipantFromGroup = (key: string, participant: string) => {
@@ -56,6 +54,26 @@ export default function Home() {
 		setGeneratedGroups(groups);
 	}
 
+	useEffect(() => {
+		const localParticipants = localStorage.getItem('participants');
+		if (localParticipants != null) {
+			const parsed = JSON.parse(localParticipants);
+			setParticipants(parsed);
+		}
+
+		const localRules = localStorage.getItem('rules');
+		if (localRules != null) {
+			setRules(JSON.parse(localRules))
+		}
+	}, []);
+
+	useEffect(() => {
+		localStorage.setItem('participants', JSON.stringify(participants));
+	}, [participants]);
+	useEffect(() => {
+		localStorage.setItem('rules', JSON.stringify(rules));
+	})
+
 	return (
 		<div className="rounded-none border-black border p-10 w-full space-y-3">
 			{/* Number of groups and generate btn*/}
@@ -76,22 +94,37 @@ export default function Home() {
 			<div>
 				{/* Participants Header */}
 				<div className="flex flex-row justify-between items-start">
-					<p className="text-lg">Participants</p>
+					{/* TODO: the text here is misaligned, want it to be centered vertically */}
+					<div className="flex flex-col align-middle">
+						<div className="flex flex-row align-middle">
+							<p className="text-lg">Participants <span className="text-slate-500 text-base">{participants.length}</span></p>
+						</div>
+						<div className="flex flex-row w-full justify-between">
+							{/* List of participants */}
+							<div className="flex flex-col space-y-1 px-1">
+								{participants.map(p => <Participant name={p} onParticipantDelete={onParticipantDelete} key={p} />)}
+							</div> 
+						</div>
+					</div>
 					{/* Add participants input */}
 					<form className="flex flex-col" onSubmit={e => {
 							e.preventDefault();
+							if (addParticipantCurr == "") {
+								return;
+							}
+							if (participants.includes(addParticipantCurr)) {
+								setAddParticipantCurr("");
+								return;
+							}
 							setParticipants([...participants, addParticipantCurr]);
 							setAddParticipantCurr("");
 						}}>
 						<input className="border border-black rounded-none p-1" onChange={e => setAddParticipantCurr(e.target.value)} value={addParticipantCurr}/>
 						<button className="p-1 rounded-none hover:underline hover:font-bold text-sm text-right" type="submit">ADD PARTICIPANT</button>
+						<button className="p-1 rounded-none hover:underline hover:font-bold text-xs text-right" onClick={e => {
+							setParticipants([]);
+							}}>CLEAR ALL PARTICIPANTS</button>
 					</form>
-				</div>
-				<div className="flex flex-row w-full justify-between">
-					{/* List of participants */}
-					<div className="flex flex-col space-y-1 px-1">
-						{participants.map(p => <Participant name={p} onParticipantDelete={onParticipantDelete} key={p} />)}
-					</div> 
 				</div>
 			</div>
 			
